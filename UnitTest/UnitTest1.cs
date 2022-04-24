@@ -37,5 +37,6 @@ namespace ADOEmployeePayrollTesting
             int actual = employeeRepository.UpdateSalary(employeeDataManager);
             Assert.AreEqual(actual, expected);
         }
+
     }
 }
