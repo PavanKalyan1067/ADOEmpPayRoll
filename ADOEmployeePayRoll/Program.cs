@@ -1,5 +1,6 @@
 ﻿using System;
 using ADO_Employee_Payroll;
+using ADO_Employee_Payroll.ADO_Employee_Payroll;
 
 namespace ADOEmployeePayRoll
 {
