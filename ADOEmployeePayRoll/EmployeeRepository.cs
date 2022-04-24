@@ -8,14 +8,18 @@ namespace ADO_Employee_Payroll.ADO_Employee_Payroll
     class EmployeeRepository
     {
         //Give path for Database Connection
-        public static string connection = @"Server=.;Database=EmployeeServices;Trusted_Connection=True;";
+        public static string connection = @"Server=.;Database=payroll_services;Trusted_Connection=True;";
         //Represents a connection to Sql Server Database
         SqlConnection sqlConnection = new SqlConnection(connection);
+
         //Create Object for EmployeeData Repository
         EmployeeDataManager employeeDataManager = new EmployeeDataManager();
+
         public void GetSqlData()
         {
             //Open Connection
+
+
             sqlConnection.Open();
             string query = "select * from employee_payroll";
             //Pass query to TSql
@@ -28,30 +32,21 @@ namespace ADO_Employee_Payroll.ADO_Employee_Payroll
                 while (sqlDataReader.Read())
                 {
                     //Read data SqlDataReader and store 
-                    employeeDataManager.EmployeeID = sqlDataReader.GetInt32(0);
-                    employeeDataManager.EmployeeName = sqlDataReader["EmployeeName"].ToString();
-                    employeeDataManager.BasicPay = Convert.ToDouble(sqlDataReader["BasicPay"]);
-                    employeeDataManager.Deduction = Convert.ToDouble(sqlDataReader["Deduction"]);
-                    employeeDataManager.IncomeTax = Convert.ToDouble(sqlDataReader["IncomeTax"]);
-                    employeeDataManager.TaxablePay = Convert.ToDouble(sqlDataReader["TaxablePay"]);
-                    employeeDataManager.NetPay = Convert.ToDouble(sqlDataReader["NetPay"]);
-                    employeeDataManager.Gender = Convert.ToChar(sqlDataReader["Gender"]);
-                    employeeDataManager.EmployeePhoneNumber = Convert.ToInt64(sqlDataReader["EmployeePhoneNumber"]);
-                    employeeDataManager.EmployeeDepartment = sqlDataReader["EmployeeDepartment"].ToString();
-                    employeeDataManager.Address = sqlDataReader["Address"].ToString();
-                    employeeDataManager.StartDate = Convert.ToDateTime(sqlDataReader["StartDate"]);
-                    //Display Data
-                    Console.WriteLine("\nEmployee ID: {0} \t Employee Name: {1} \nBasic Pay: {2} \t Deduction: {3} \t Income Tax: {4} \t Taxable Pay: {5} \t NetPay: {6} \nGender: {7} \t PhoneNumber: {8} \t Department: {9} \t Address: {10}", employeeDataManager.EmployeeID, employeeDataManager.EmployeeName, employeeDataManager.BasicPay, employeeDataManager.Deduction, employeeDataManager.IncomeTax, employeeDataManager.TaxablePay, employeeDataManager.NetPay, employeeDataManager.Gender, employeeDataManager.EmployeePhoneNumber, employeeDataManager.EmployeeDepartment, employeeDataManager.Address);
+                    DisplayEmployeeDetails(sqlDataReader);
                 }
                 //Close sqlDataReader Connection
                 sqlDataReader.Close();
             }
             //Close Connection
             sqlConnection.Close();
+            return;
+
         }
+
         //UseCase 3: Update Salary to 3000000
         public int UpdateSalaryQuery()
         {
+
             //Open Connection
             sqlConnection.Open();
             string query = "update employee_payroll set BasicPay=3000000 where EmployeeName= 'Ashaya Sivakumar'";
@@ -70,8 +65,9 @@ namespace ADO_Employee_Payroll.ADO_Employee_Payroll
             sqlConnection.Close();
             GetSqlData();
             return result;
-
         }
+
+        //UseCase 4: Update Salary to 3000000 using Stored Procedure
         public int UpdateSalary(EmployeeDataManager employeeDataManager)
         {
             int result = 0;
@@ -105,8 +101,11 @@ namespace ADO_Employee_Payroll.ADO_Employee_Payroll
             }
             return result;
         }
+
         public int RetrieveQuery(EmployeeDataManager employeeDataManager)
         {
+
+
             int result = 0;
             try
             {
@@ -154,9 +153,12 @@ namespace ADO_Employee_Payroll.ADO_Employee_Payroll
             sqlConnection.Close();
             return result;
         }
+
+
         //Usecase 5: Finds the employees in a given range from start date to current
         public string DataBasedOnDateRange()
         {
+
             string nameList = "";
             try
             {
@@ -193,10 +195,12 @@ namespace ADO_Employee_Payroll.ADO_Employee_Payroll
 
         }
 
-        //Usecase 6: Finds the employees in a given range from start date to current
+        //Usecase 6: Aggregate Functions
         public string AggregateFunctionBasedOnGender(string query)
         {
             string nameList = "";
+
+
             try
             {
                 using (sqlConnection)
@@ -205,7 +209,6 @@ namespace ADO_Employee_Payroll.ADO_Employee_Payroll
                     SqlCommand command = new SqlCommand(query, this.sqlConnection);
                     //open sql connection
                     sqlConnection.Open();
-
                     SqlDataReader sqlDataReader = command.ExecuteReader();
                     if (sqlDataReader.HasRows)
                     {
@@ -218,7 +221,6 @@ namespace ADO_Employee_Payroll.ADO_Employee_Payroll
                     //close reader
                     sqlDataReader.Close();
                 }
-
             }
             catch (Exception ex)
             {
@@ -226,14 +228,12 @@ namespace ADO_Employee_Payroll.ADO_Employee_Payroll
             }
             finally
             {
-
                 sqlConnection.Close();
             }
             //returns the count of employee in the list between the given range
             return nameList;
 
         }
-
         public void DisplayEmployeeDetails(SqlDataReader sqlDataReader)
         {
             //Read data SqlDataReader and store 
